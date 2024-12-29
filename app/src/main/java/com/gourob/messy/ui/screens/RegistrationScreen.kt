@@ -1,5 +1,6 @@
 package com.gourob.messy.ui.screens
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -14,37 +15,61 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.gourob.messy.presentation.viewmodel.RegistrationViewModel
 import com.gourob.messy.ui.theme.MessyTheme
 import com.gourob.messy.utils.isValidEmail
-import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.flow.collectLatest
 
 
 @Composable
 fun RegistrationScreen(
-    viewModel: RegistrationViewModel = viewModel()
+    viewModel: RegistrationViewModel = hiltViewModel(),
+    onNavigateToLogin: () -> Unit,
 ) {
-    RegistrationScreenContent(
-        onRegister = { username, email, password ->
-            viewModel.registerUser(username, email, password)
+    val context = LocalContext.current
+
+    LaunchedEffect(Unit) {
+        viewModel.toastFlow.collectLatest { message ->
+            Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
         }
+    }
+
+    val isRegistrationSuccess by viewModel.isRegistrationSuccess.collectAsState()
+
+    LaunchedEffect(isRegistrationSuccess) {
+        if (isRegistrationSuccess) {
+            onNavigateToLogin()
+        }
+    }
+
+
+    RegistrationScreenContent(
+        onRegisterClicked = { username, email, password ->
+            viewModel.registerUser(username, email, password)
+        },
+        onNavigateToLogin = onNavigateToLogin
     )
 }
 
 @Composable
 fun RegistrationScreenContent(
-    onRegister: (String, String, String) -> Unit,
+    onRegisterClicked: (String, String, String) -> Unit,
+    onNavigateToLogin: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var username by remember { mutableStateOf("") }
@@ -54,6 +79,7 @@ fun RegistrationScreenContent(
 
     var showPasswordMismatchError by remember { mutableStateOf(false) }
     var showInvalidEmailError by remember { mutableStateOf(false) }
+
 
     Column(
         modifier = modifier
@@ -145,7 +171,7 @@ fun RegistrationScreenContent(
                 } else {
                     showPasswordMismatchError = false
                     showInvalidEmailError = false
-                    onRegister(username, email, password) // Trigger registration logic
+                    onRegisterClicked(username, email, password) // Trigger registration logic
                 }
             },
             modifier = Modifier.fillMaxWidth()
@@ -161,7 +187,8 @@ fun RegistrationScreenContent(
 private fun RegistrationScreenPreview() {
     MessyTheme {
         RegistrationScreenContent(
-            onRegister = { _, _, _ -> },
+            onRegisterClicked = { _, _, _ -> },
+            onNavigateToLogin = {},
             modifier = Modifier.fillMaxSize()
         )
     }

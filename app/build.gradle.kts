@@ -2,6 +2,9 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
+    kotlin("plugin.serialization") version "2.0.21"
 }
 
 android {
@@ -58,5 +61,33 @@ dependencies {
     debugImplementation(libs.androidx.ui.test.manifest)
 
     implementation(libs.androidx.lifecycle.viewmodel.compose)
+    // Retrofit
+    implementation(libs.retrofit)
+    // Retrofit with Scalar Converter
+    implementation(libs.converter.scalars)
+    // Retrofit GSON
+    implementation(libs.converter.gson)
+
+    //Hilt Navigation Compose
+    implementation(libs.androidx.hilt.navigation.compose)
+
+    //Navigation Compose
+    implementation(libs.androidx.navigation.compose)
+
+    //GSON
+    implementation(libs.gson)
+
+    //Dagger Hilt
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
+
+
+    //DataStore Preference
+    implementation("androidx.datastore:datastore-preferences:1.1.1")
+
+
+    implementation("com.squareup.okhttp3:logging-interceptor:3.8.0")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-core:1.7.3")
 
 }
