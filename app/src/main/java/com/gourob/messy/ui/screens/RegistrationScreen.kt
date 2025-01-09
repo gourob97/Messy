@@ -29,19 +29,41 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavHostController
 import com.gourob.messy.presentation.viewmodel.RegistrationViewModel
+import com.gourob.messy.ui.components.MessyText
+import com.gourob.messy.ui.navigation.LoginRoute
+import com.gourob.messy.ui.navigation.NavigationComposable
+import com.gourob.messy.ui.navigation.NavigationEvent
+import com.gourob.messy.ui.navigation.RegistrationRoute
 import com.gourob.messy.ui.theme.MessyTheme
-import com.gourob.messy.utils.isValidEmail
 import kotlinx.coroutines.flow.collectLatest
 
 
 @Composable
 fun RegistrationScreen(
-    viewModel: RegistrationViewModel = hiltViewModel(),
-    onNavigateToLogin: () -> Unit,
+    navController: NavHostController,
+    viewModel: RegistrationViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
+    val navigationEvent = viewModel.navigationEvent.collectAsState()
+
+    LaunchedEffect(navigationEvent.value) {
+        when (navigationEvent.value) {
+            NavigationEvent.ToLoginScreen -> {
+                navController.navigate(LoginRoute) {
+                    popUpTo<RegistrationRoute> {
+                        inclusive = true
+                    }
+                }
+            }
+            null -> {
+                println("navigation event null")
+            }
+        }
+    }
 
     LaunchedEffect(Unit) {
         viewModel.toastFlow.collectLatest { message ->
@@ -49,27 +71,17 @@ fun RegistrationScreen(
         }
     }
 
-    val isRegistrationSuccess by viewModel.isRegistrationSuccess.collectAsState()
-
-    LaunchedEffect(isRegistrationSuccess) {
-        if (isRegistrationSuccess) {
-            onNavigateToLogin()
-        }
-    }
-
-
     RegistrationScreenContent(
+        modifier = Modifier.fillMaxSize(),
         onRegisterClicked = { username, email, password ->
-            viewModel.registerUser(username, email, password)
-        },
-        onNavigateToLogin = onNavigateToLogin
+            viewModel.onRegisterClicked(username, email, password)
+        }
     )
 }
 
 @Composable
 fun RegistrationScreenContent(
     onRegisterClicked: (String, String, String) -> Unit,
-    onNavigateToLogin: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     var username by remember { mutableStateOf("") }
@@ -77,20 +89,17 @@ fun RegistrationScreenContent(
     var password by remember { mutableStateOf("") }
     var confirmPassword by remember { mutableStateOf("") }
 
-    var showPasswordMismatchError by remember { mutableStateOf(false) }
-    var showInvalidEmailError by remember { mutableStateOf(false) }
-
 
     Column(
         modifier = modifier
-            .fillMaxSize()
             .padding(16.dp)
             .imePadding(),
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-        Text(
+        MessyText(
             text = "Register",
+            fontSize = 32.sp,
             fontWeight = FontWeight.Bold,
             style = MaterialTheme.typography.headlineLarge,
             modifier = Modifier.padding(bottom = 16.dp)
@@ -99,7 +108,7 @@ fun RegistrationScreenContent(
         OutlinedTextField(
             value = username,
             onValueChange = { username = it },
-            label = { Text("Username") },
+            label = { MessyText("Username") },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true
         )
@@ -110,30 +119,19 @@ fun RegistrationScreenContent(
             value = email,
             onValueChange = {
                 email = it
-                showInvalidEmailError = false
             },
-            label = { Text("Email") },
+            label = { MessyText("Email") },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
             keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
         )
-
-
-        if (showInvalidEmailError) {
-            Text(
-                text = "Invalid email format",
-                color = MaterialTheme.colorScheme.error,
-                style = MaterialTheme.typography.bodySmall,
-                modifier = Modifier.padding(top = 4.dp)
-            )
-        }
 
         Spacer(modifier = Modifier.height(8.dp))
 
         OutlinedTextField(
             value = password,
             onValueChange = { password = it },
-            label = { Text("Password") },
+            label = { MessyText("Password") },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
             visualTransformation = PasswordVisualTransformation()
@@ -144,39 +142,22 @@ fun RegistrationScreenContent(
         OutlinedTextField(
             value = confirmPassword,
             onValueChange = { confirmPassword = it },
-            label = { Text("Confirm Password") },
+            label = { MessyText("Confirm Password") },
             modifier = Modifier.fillMaxWidth(),
             singleLine = true,
             visualTransformation = PasswordVisualTransformation()
         )
-
-        if (showPasswordMismatchError) {
-            Text(
-                text = "Passwords do not match",
-                color = MaterialTheme.colorScheme.error,
-                style = MaterialTheme.typography.bodySmall,
-                modifier = Modifier.padding(top = 4.dp)
-            )
-        }
 
         Spacer(modifier = Modifier.height(16.dp))
 
         // Register Button
         Button(
             onClick = {
-                if (!isValidEmail(email)) {
-                    showInvalidEmailError = true
-                } else if (password != confirmPassword || password.isEmpty()) {
-                    showPasswordMismatchError = true
-                } else {
-                    showPasswordMismatchError = false
-                    showInvalidEmailError = false
-                    onRegisterClicked(username, email, password) // Trigger registration logic
-                }
+                onRegisterClicked(username, email, password)
             },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text(text = "Register")
+            MessyText(text = "Register", fontSize = 18.sp)
         }
     }
 }
@@ -188,7 +169,6 @@ private fun RegistrationScreenPreview() {
     MessyTheme {
         RegistrationScreenContent(
             onRegisterClicked = { _, _, _ -> },
-            onNavigateToLogin = {},
             modifier = Modifier.fillMaxSize()
         )
     }

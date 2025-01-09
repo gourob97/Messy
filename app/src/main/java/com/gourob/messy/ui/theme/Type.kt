@@ -2,9 +2,12 @@ package com.gourob.messy.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
+import com.gourob.messy.R
 
 // Set of Material typography styles to start with
 val Typography = Typography(
@@ -31,4 +34,13 @@ val Typography = Typography(
         letterSpacing = 0.5.sp
     )
     */
+)
+
+val CeraPro = FontFamily(
+    Font(R.font.cera_pro_black, FontWeight.Black),
+    Font(R.font.cera_pro_black_italic, FontWeight.Black, FontStyle.Italic),
+    Font(R.font.cera_pro_bold, FontWeight.Bold),
+    Font(R.font.cera_pro_light, FontWeight.Light),
+    Font(R.font.cera_pro_medium, FontWeight.Medium),
+    Font(R.font.cera_pro_regular_italic, FontWeight.Normal,FontStyle.Italic),
 )

@@ -1,22 +1,14 @@
 package com.gourob.messy.di
 
-import android.util.Log
+import com.gourob.messy.data.mock_repository.MockAuthRepository
 import com.gourob.messy.data.network.RegistrationApi
-import com.gourob.messy.data.repository.RegistrationRepositoryImpl
-import com.gourob.messy.domain.repository.RegistrationRepository
+import com.gourob.messy.domain.repository.AuthRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import okhttp3.Interceptor
-import okhttp3.Interceptor.Chain
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.Response
-import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
-import java.io.IOException
 import javax.inject.Singleton
 
 @Module
@@ -41,7 +33,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideRegistrationRepository(api: RegistrationApi): RegistrationRepository {
-        return RegistrationRepositoryImpl(api)
+    fun provideRegistrationRepository(api: RegistrationApi): AuthRepository {
+        return MockAuthRepository()
     }
 }
