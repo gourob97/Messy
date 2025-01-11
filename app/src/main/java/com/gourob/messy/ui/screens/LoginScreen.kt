@@ -1,18 +1,12 @@
 package com.gourob.messy.ui.screens
 
-import android.graphics.drawable.shapes.OvalShape
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.CutCornerShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonColors
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
@@ -22,14 +16,13 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.graphics.Shape
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.gourob.messy.R
 import com.gourob.messy.ui.components.MessyText
 import com.gourob.messy.ui.theme.MessyTheme
 
@@ -59,7 +52,7 @@ fun LoginScreenContent(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             MessyText(
-                text = "Login",
+                text = stringResource(R.string.login_title),
                 fontSize = 32.sp,
                 fontWeight = FontWeight.Bold,
                 style = MaterialTheme.typography.headlineLarge,
@@ -71,7 +64,7 @@ fun LoginScreenContent(
                 onValueChange = {
                     username = it
                 },
-                label = { MessyText("Username") },
+                label = { MessyText(stringResource(R.string.username)) },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true
             )
@@ -82,7 +75,7 @@ fun LoginScreenContent(
                 onValueChange = {
                     password = it
                 },
-                label = { MessyText("Email") },
+                label = { MessyText(stringResource(R.string.password)) },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true,
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Email)
@@ -94,7 +87,7 @@ fun LoginScreenContent(
                     onLoginClicked(username, password)
                 },
             ) {
-                MessyText("Login", fontSize = 18.sp, modifier = Modifier.padding(8.dp))
+                MessyText(stringResource(R.string.login_button_title), fontSize = 18.sp, modifier = Modifier.padding(8.dp))
             }
         }
     }

@@ -2,14 +2,12 @@ package com.gourob.messy.ui.navigation
 
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.gourob.messy.ui.screens.LoginScreen
 import com.gourob.messy.ui.screens.RegistrationScreen
-import kotlinx.serialization.Serializable
+
 
 @Composable
 fun AppNavHost(
@@ -17,8 +15,7 @@ fun AppNavHost(
     isUserLoggedIn: Boolean,
     isUserRegistered: Boolean
 ) {
-    val context = LocalContext.current
-    val coroutineScope = rememberCoroutineScope()
+
     NavHost(
         navController = navController,
         startDestination = when {
@@ -28,7 +25,7 @@ fun AppNavHost(
         }
     ) {
         composable<RegistrationRoute> {
-            RegistrationScreen(navController)
+            RegistrationScreen()
         }
         composable<LoginRoute>{
             LoginScreen()
@@ -38,12 +35,3 @@ fun AppNavHost(
         }
     }
 }
-
-@Serializable
-object RegistrationRoute
-
-@Serializable
-object LoginRoute
-
-@Serializable
-object HomeRoute

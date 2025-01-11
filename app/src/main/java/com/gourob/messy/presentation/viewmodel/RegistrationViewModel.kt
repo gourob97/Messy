@@ -1,21 +1,15 @@
 package com.gourob.messy.presentation.viewmodel
 
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.gourob.messy.data.model.LoginRequest
 import com.gourob.messy.data.model.RegistrationRequest
 import com.gourob.messy.domain.model.Result
 import com.gourob.messy.domain.repository.AuthRepository
-import com.gourob.messy.ui.navigation.NavigationEvent
-import com.gourob.messy.utils.isValidEmail
+import com.gourob.messy.ui.navigation.LoginRoute
+import com.gourob.messy.ui.navigation.NavigationManager
+import com.gourob.messy.ui.navigation.RegistrationRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -23,10 +17,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class RegistrationViewModel @Inject constructor(
-    private val repository: AuthRepository
+    private val repository: AuthRepository,
+    private val navigationManager: NavigationManager
 ) : ViewModel() {
-    private val _navigationEvent = MutableStateFlow<NavigationEvent?>(null)
-    val navigationEvent = _navigationEvent.asStateFlow()
 
     private var message = ""
 
@@ -37,8 +30,8 @@ class RegistrationViewModel @Inject constructor(
     private val _toastChannel = Channel<String>(Channel.BUFFERED)
     val toastFlow = _toastChannel.receiveAsFlow()
 
-    private fun navigateToLoginScreen() {
-        _navigationEvent.value = NavigationEvent.ToLoginScreen
+    private suspend fun navigateToLoginScreen() {
+        navigationManager.navigateWithPopUpTo(LoginRoute, RegistrationRoute, true)
     }
 
     fun onRegisterClicked(username: String, email: String, password: String) {
@@ -60,11 +53,11 @@ class RegistrationViewModel @Inject constructor(
                 }
 
                 is Result.Success -> {
+                    navigateToLoginScreen()
                     "Success"
                 }
             }
             showToast(message)
-            navigateToLoginScreen()
         }
     }
 }
