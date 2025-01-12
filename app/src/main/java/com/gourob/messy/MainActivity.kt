@@ -13,6 +13,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.compose.rememberNavController
@@ -41,12 +42,12 @@ class MainActivity : ComponentActivity() {
         setContent {
 
             MessyTheme {
-                Scaffold { _ ->
+                Scaffold { innerPadding ->
                     val navController = rememberNavController()
                     val context = LocalContext.current
-                    var isDataLoaded by remember { mutableStateOf(false) }
-                    var isUserLoggedIn by remember { mutableStateOf(false) }
-                    var isUserRegistered by remember { mutableStateOf(false) }
+                    var isDataLoaded by rememberSaveable { mutableStateOf(false) }
+                    var isUserLoggedIn by rememberSaveable  { mutableStateOf(false) }
+                    var isUserRegistered by rememberSaveable  { mutableStateOf(false) }
 
                     LaunchedEffect(Unit) {
                         navigationManager.singleScreenNavigationCommands.collect { route ->
@@ -77,13 +78,12 @@ class MainActivity : ComponentActivity() {
                         enter = scaleIn(),
                         exit = scaleOut()
                     ) {
-                        AppNavHost(navController, isUserLoggedIn, isUserRegistered)
+                        AppNavHost(innerPadding, navController, isUserLoggedIn, isUserRegistered)
                     }
                     if(!isDataLoaded) {
                         SplashScreen()
                     }
                 }
-
             }
         }
     }

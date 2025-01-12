@@ -54,7 +54,7 @@ class RegistrationViewModel @Inject constructor(
 
                 is Result.Success -> {
                     navigateToLoginScreen()
-                    "Success"
+                    "Registration Success"
                 }
             }
             showToast(message)

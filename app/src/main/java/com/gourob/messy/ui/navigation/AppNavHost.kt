@@ -1,22 +1,27 @@
 package com.gourob.messy.ui.navigation
 
-import androidx.compose.material3.Text
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.gourob.messy.ui.screens.LoginScreen
-import com.gourob.messy.ui.screens.RegistrationScreen
+import com.gourob.messy.ui.screens.HomeScreen
+import com.gourob.messy.ui.screens.auth.LoginScreen
+import com.gourob.messy.ui.screens.auth.RegistrationScreen
 
 
 @Composable
 fun AppNavHost(
+    innerPadding: PaddingValues,
     navController: NavHostController,
     isUserLoggedIn: Boolean,
     isUserRegistered: Boolean
 ) {
 
     NavHost(
+        modifier = Modifier.padding(innerPadding),
         navController = navController,
         startDestination = when {
             isUserLoggedIn -> HomeRoute
@@ -31,7 +36,7 @@ fun AppNavHost(
             LoginScreen()
         }
         composable<HomeRoute>{
-            Text("HomeScreen")
+            HomeScreen()
         }
     }
 }
