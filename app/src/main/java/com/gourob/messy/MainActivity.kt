@@ -47,7 +47,7 @@ class MainActivity : ComponentActivity() {
                     val context = LocalContext.current
                     var isDataLoaded by rememberSaveable { mutableStateOf(false) }
                     var isUserLoggedIn by rememberSaveable  { mutableStateOf(false) }
-                    var isUserRegistered by rememberSaveable  { mutableStateOf(false) }
+                    var isUserRegistered by rememberSaveable  { mutableStateOf(true) }
 
                     LaunchedEffect(Unit) {
                         navigationManager.singleScreenNavigationCommands.collect { route ->
@@ -68,7 +68,7 @@ class MainActivity : ComponentActivity() {
 
                     LaunchedEffect(Unit) {
                         isUserLoggedIn = DataStoreManager.isLoggedIn(context).first()
-                        isUserRegistered = DataStoreManager.isRegistered(context).first()
+                        //isUserRegistered = DataStoreManager.isRegistered(context).first()
                         delay(2000)
                         isDataLoaded = true
                     }

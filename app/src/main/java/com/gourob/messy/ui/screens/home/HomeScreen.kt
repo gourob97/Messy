@@ -125,7 +125,6 @@ fun HomeScreenContent(
                 guestDinnerCount = uiState.dinnerMealState.guestCount,
                 onGuestLunchCountChange = onGuestLunchCountChange,
                 onGuestDinnerCountChange = onGuestDinnerCountChange,
-
             )
 
 

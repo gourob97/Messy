@@ -15,7 +15,8 @@ import com.gourob.messy.ui.components.MessyText
 fun MealSwitch(
     text: String,
     checked: Boolean,
-    onCheckedChange: (Boolean) -> Unit
+    onCheckedChange: (Boolean) -> Unit,
+    isEnabled: Boolean = true
 ) {
     Row(
         modifier = Modifier.fillMaxWidth(),
@@ -23,6 +24,6 @@ fun MealSwitch(
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
         MessyText(text, fontWeight = FontWeight.Bold, fontSize = 20.sp)
-        Switch(checked, onCheckedChange = onCheckedChange)
+        Switch(checked, onCheckedChange = onCheckedChange, enabled = isEnabled)
     }
 }
