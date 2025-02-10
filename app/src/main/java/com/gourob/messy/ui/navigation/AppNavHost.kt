@@ -7,9 +7,9 @@ import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.gourob.messy.ui.screens.HomeScreen
 import com.gourob.messy.ui.screens.auth.LoginScreen
 import com.gourob.messy.ui.screens.auth.RegistrationScreen
+import com.gourob.messy.ui.screens.home.HomeScreen
 
 
 @Composable

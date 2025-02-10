@@ -20,7 +20,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -57,7 +56,7 @@ fun HomeScreen(
             viewModel.onGuestDinnerCountChange(it)
         },
         onMealItemLikeChanged = { item, isLiked ->
-            viewModel.onItemClicked(item, isLiked)
+            //viewModel.onItemClicked(item, isLiked)
         }
 
     )
@@ -129,6 +128,8 @@ fun HomeScreenContent(
 
             )
 
+
+
             MealMenuSection(
                 uiState.lunchMealState.menuItems,
                 uiState.dinnerMealState.menuItems,
@@ -152,8 +153,8 @@ fun HomeScreenContent(
 }
 
 
-@Preview(showBackground = true)
-@Composable
-private fun HomeScreenContentPreview() {
-    HomeScreenContent(uiState = HomeUiState(), {}, {}, {}, {}, {}, { _, _ ->})
-}
+//@Preview(showBackground = true)
+//@Composable
+//private fun HomeScreenContentPreview() {
+//    HomeScreenContent(uiState = HomeUiState(), {}, {}, {}, {}, {}, { _, _ ->})
+//}

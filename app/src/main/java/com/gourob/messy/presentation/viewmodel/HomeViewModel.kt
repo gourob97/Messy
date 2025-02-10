@@ -1,8 +1,8 @@
 package com.gourob.messy.presentation.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.gourob.messy.ui.screens.HomeUiState
-import com.gourob.messy.ui.screens.MealItem
+import com.gourob.messy.ui.screens.home.model.HomeUiState
+import com.gourob.messy.ui.screens.home.model.MealItem
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
